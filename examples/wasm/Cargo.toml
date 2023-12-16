@@ -8,6 +8,8 @@ risc0-zkvm = { path = "../../risc0/zkvm" }
 serde = "1.0"
 wasm-methods = { path = "methods" }
 wat = "<1.0.72"
+clap = "3.2.25"
+log = "0.4.20"
 
 [features]
 cuda = ["risc0-zkvm/cuda"]

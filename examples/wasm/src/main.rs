@@ -12,7 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
+use clap::{Arg, Command};
 use risc0_zkvm::{default_prover, ExecutorEnv};
+use std::fs;
 use wasm_methods::{WASM_INTERP_ELF, WASM_INTERP_ID};
 
 fn wat2wasm(wat: &str) -> Result<Vec<u8>, wat::Error> {
@@ -20,7 +23,21 @@ fn wat2wasm(wat: &str) -> Result<Vec<u8>, wat::Error> {
 }
 
 fn run_guest(iters: i32) -> i32 {
-    let wat = r#"
+    let matches = Command::new("myprog")
+        .arg(Arg::with_name("wasm").short('w').long("wasm").help("wasm_file").required(false).takes_value(true))
+        .get_matches();
+
+    let wasm_file = matches.get_one::<String>("wasm");
+
+    let wasm = if wasm_file.is_some() {
+        let wasm_file = wasm_file.unwrap();
+        let wasm_binary = fs::read(wasm_file).unwrap();
+        println!("load file from {}", wasm_file);
+        wasm_binary
+    } else {
+        println!("Arguments provided");
+
+        let wat = r#"
     (module
         (export "fib" (func $fib))
         (func $fib (; 0 ;) (param $0 i32) (result i32)
@@ -75,7 +92,9 @@ fn run_guest(iters: i32) -> i32 {
     )
     "#;
 
-    let wasm = wat2wasm(&wat).expect("Failed to parse_str");
+        let wasm = wat2wasm(&wat).expect("Failed to parse_str");
+        wasm
+    };
 
     let env = ExecutorEnv::builder()
         .write(&wasm)

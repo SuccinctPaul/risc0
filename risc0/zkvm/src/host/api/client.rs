@@ -437,7 +437,7 @@ impl Client {
         }
     }
 
-    fn on_io(&self, env: &ExecutorEnv<'_>, request: pb::api::OnIoRequest) -> Result<Bytes> {
+    fn  on_io(&self, env: &ExecutorEnv<'_>, request: pb::api::OnIoRequest) -> Result<Bytes> {
         match request.kind.ok_or(malformed_err())? {
             pb::api::on_io_request::Kind::Posix(posix) => {
                 let cmd = posix.cmd.ok_or(malformed_err())?;

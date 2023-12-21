@@ -39,7 +39,7 @@ pub fn main() {
         .expect("Failed to start");
 
     let fib = instance
-        .get_typed_func::<i32, i32>(&store, "fib")
+        .get_typed_func::<i32, i32>(&store, "zkmain")
         .expect("Failed to get typed_func");
     let res = fib.call(&mut store, iters).expect("Failed to call");
     env::log(&format!("fib {} - {}", iters, res));

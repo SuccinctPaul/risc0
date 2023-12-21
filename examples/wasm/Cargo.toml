@@ -10,6 +10,7 @@ wasm-methods = { path = "methods" }
 wat = "<1.0.72"
 clap = "3.2.25"
 log = "0.4.20"
+ark-std = { version = "0.3.0", features = ["print-trace"] }
 
 [features]
 cuda = ["risc0-zkvm/cuda"]

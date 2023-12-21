@@ -28,9 +28,10 @@ pub fn main() {
 
     let mut res = 0;
     for _ in 0..iter {
-        res = a.add(b);
-        b = res;
+        // res = a.add(b);
+        res = a+b;
         a = b;
+        b = res;
     }
 
     // Compute the product while being careful with integer overflow

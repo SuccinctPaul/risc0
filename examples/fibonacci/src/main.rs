@@ -70,16 +70,16 @@ mod tests {
         let mut b = 1;
 
         let mut res = 0;
-        for i in 0..iter {
+        for _ in 0..iter {
             res = a + b;
-            b = res;
             a = b;
+            b = res;
         }
-        b
+        res
     }
 
     #[test]
-    fn test_hello_world() {
+    fn test_fib() {
         const N: u64 = 100;
         let (_, actual) = execute(N);
         assert_eq!(
@@ -91,10 +91,11 @@ mod tests {
 
     #[test]
     fn test_expect_fib() {
-        const N: u64 = 10;
+        const N: u64 = 9;
         let result = expect_fib(N);
+        println!("{:?}",result);
         assert_eq!(
-            result, 50,
+            result, 55,
             "We expect the zkVM output to be the product of the inputs"
         )
     }

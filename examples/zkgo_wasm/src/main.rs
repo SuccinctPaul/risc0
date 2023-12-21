@@ -12,70 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use risc0_zkvm::{default_prover, ExecutorEnv};
-use wasm_methods::{WASM_INTERP_ELF, WASM_INTERP_ID};
 
-fn wat2wasm(wat: &str) -> Result<Vec<u8>, wat::Error> {
-    wat::parse_str(wat)
-}
+use clap::{Arg, Command};
+use risc0_zkvm::{default_prover, ExecutorEnv};
+use std::fs;
+use zkgo_wasm_methods::{ZKGO_WASM_INTERP_ELF, ZKGO_WASM_INTERP_ID};
+
+use ark_std::{start_timer, end_timer};
+
+// fn wat2wasm(wat: &str) -> Result<Vec<u8>, wat::Error> {
+//     wat::parse_str(wat)
+// }
 
 fn run_guest(iters: i32) -> i32 {
-    let wat = r#"
-    (module
-        (export "fib" (func $fib))
-        (func $fib (; 0 ;) (param $0 i32) (result i32)
-        (local $1 i32)
-        (local $2 i32)
-        (local $3 i32)
-        (local $4 i32)
-        (set_local $4
-         (i32.const 1)
-        )
-        (block $label$0
-         (br_if $label$0
-          (i32.lt_s
-           (get_local $0)
-           (i32.const 1)
-          )
-         )
-         (set_local $3
-          (i32.const 0)
-         )
-         (loop $label$1
-          (set_local $1
-           (i32.add
-            (get_local $3)
-            (get_local $4)
-           )
-          )
-          (set_local $2
-           (get_local $4)
-          )
-          (set_local $3
-           (get_local $4)
-          )
-          (set_local $4
-           (get_local $1)
-          )
-          (br_if $label$1
-           (tee_local $0
-            (i32.add
-             (get_local $0)
-             (i32.const -1)
-            )
-           )
-          )
-         )
-         (return
-          (get_local $2)
-         )
-        )
-        (i32.const 0)
-       )
-    )
-    "#;
+    let matches = Command::new("myprog")
+        .arg(Arg::with_name("wasm").short('w').long("wasm").help("wasm_file").required(false).takes_value(true))
+        .get_matches();
 
-    let wasm = wat2wasm(&wat).expect("Failed to parse_str");
+    let wasm_file = matches.get_one::<String>("wasm");
+
+    let wasm = {
+        let wasm_file = wasm_file.unwrap();
+        let wasm_binary = fs::read(wasm_file).unwrap();
+        println!("load file from {}", wasm_file);
+        wasm_binary
+    };
 
     let env = ExecutorEnv::builder()
         .write(&wasm)
@@ -89,9 +50,11 @@ fn run_guest(iters: i32) -> i32 {
     let prover = default_prover();
 
     // Produce a receipt by proving the specified ELF binary.
-    let receipt = prover.prove_elf(env, WASM_INTERP_ELF).unwrap();
+    let start = start_timer!(||"prove_elf");
+    let receipt = prover.prove_elf(env, ZKGO_WASM_INTERP_ELF).unwrap();
+    end_timer!(start);
 
-    receipt.verify(WASM_INTERP_ID).expect(
+    receipt.verify(ZKGO_WASM_INTERP_ID).expect(
         "Code you have proven should successfully verify; did you specify the correct image ID?",
     );
     let result: i32 = receipt.journal.decode().unwrap();
@@ -100,7 +63,7 @@ fn run_guest(iters: i32) -> i32 {
 }
 
 fn main() {
-    let fib_iters: i32 = 100000;
+    let fib_iters: i32 = 100;
     let _ = run_guest(fib_iters);
 }
 

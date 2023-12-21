@@ -14,7 +14,6 @@ members = [
   "json/core",
   "password-checker",
   "password-checker/core",
-  "profiling",
   "prorata",
   "prorata/core",
   "sha",
@@ -29,6 +28,8 @@ members = [
   "xgboost",
   "zkevm-demo",
   "zkevm-demo/core",
+  "zkgo_wasm",
+  "fibonacci",
 ]
 
 # Always optimize; otherwise tests take excessively long.

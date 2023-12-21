@@ -1593,6 +1593,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "fibonacci"
+version = "0.1.0"
+dependencies = [
+ "fibonacci-methods",
+ "risc0-zkvm",
+ "serde",
+]
+
+[[package]]
 name = "fibonacci-methods"
 version = "0.1.0"
 dependencies = [
@@ -3122,17 +3131,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5b1106fec09662ec6dd98ccac0f81cef56984d0b49f75c92d8cbad76e20c005c"
 dependencies = [
  "unicode-ident",
-]
-
-[[package]]
-name = "profiling"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "env_logger",
- "fibonacci-methods",
- "risc0-zkvm",
- "serde",
 ]
 
 [[package]]
@@ -5691,6 +5689,26 @@ name = "zkevm-methods"
 version = "0.1.0"
 dependencies = [
  "risc0-build",
+]
+
+[[package]]
+name = "zkgo-wasm-methods"
+version = "0.1.0"
+dependencies = [
+ "risc0-build",
+]
+
+[[package]]
+name = "zkgo_wasm"
+version = "0.1.0"
+dependencies = [
+ "ark-std 0.3.0",
+ "clap 3.2.25",
+ "log",
+ "risc0-zkvm",
+ "serde",
+ "wat",
+ "zkgo-wasm-methods",
 ]
 
 [[package]]

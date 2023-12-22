@@ -454,14 +454,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9c8d87e72b64a3b4db28d11ce29237c246188f4f51057d65a7eab63b7987e423"
 
 [[package]]
-name = "wasm-interp"
-version = "0.1.0"
-dependencies = [
- "risc0-zkvm",
- "wasmi",
-]
-
-[[package]]
 name = "wasmi"
 version = "0.29.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -499,4 +491,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9157cab83003221bfd385833ab587a039f5d6fa7304854042ba358a3b09e0724"
 dependencies = [
  "indexmap-nostd",
+]
+
+[[package]]
+name = "zkgo-wasm-interp"
+version = "0.1.0"
+dependencies = [
+ "risc0-zkvm",
+ "wasmi",
 ]

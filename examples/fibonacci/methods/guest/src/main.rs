@@ -23,7 +23,7 @@ pub fn main() {
     // Load the first number from the host
     let iter: u64 = env::read();
 
-    let mut a = 0;
+    let mut a :u64 = 0;
     let mut b = 1;
 
     let mut res = 0;

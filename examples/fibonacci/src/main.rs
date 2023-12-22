@@ -17,6 +17,7 @@ use fibonacci_methods::FIB_ELF;
 use fibonacci_methods::FIB_ID;
 
 use risc0_zkvm::{default_prover, ExecutorEnv, Receipt};
+use ark_std::{start_timer, end_timer};
 
 // This is a Hello World demo for the RISC Zero zkVM.
 // By running the demo, Alice can produce a receipt that proves that she knows
@@ -36,8 +37,9 @@ pub fn execute(iter: u64) -> (Receipt, u64) {
     let prover = default_prover();
 
     // Produce a receipt by proving the specified ELF binary.
+    let start = start_timer!(||"prove_elf");
     let receipt = prover.prove_elf(env, FIB_ELF).unwrap();
-
+    end_timer!(start);
     // Extract journal of receipt (i.e. output c, where c = a * b)
     let c: u64 = receipt.journal.decode().expect(
         "Journal output should deserialize into the same types (& order) that it was written",
@@ -50,8 +52,10 @@ pub fn execute(iter: u64) -> (Receipt, u64) {
 }
 
 fn main() {
+    let start = start_timer!(||"fibonacci_riscv");
+
     // Pick two numbers
-    let (receipt, _) = execute(100000);
+    let (receipt, _) = execute(1000);
 
     // Here is where one would send 'receipt' over the network...
 
@@ -59,6 +63,7 @@ fn main() {
     receipt.verify(FIB_ID).expect(
         "Code you have proven should successfully verify; did you specify the correct image ID?",
     );
+    end_timer!(start);
 }
 
 #[cfg(test)]

@@ -7,6 +7,7 @@ edition = "2021"
 fibonacci-methods = { path = "methods" }
 risc0-zkvm = { path = "../../risc0/zkvm" }
 serde = "1.0"
+ark-std = { version = "0.3.0", features = ["print-trace"] }
 
 [features]
 cuda = ["risc0-zkvm/cuda"]

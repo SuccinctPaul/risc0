@@ -22,7 +22,9 @@ mod prover_impl;
 #[cfg(test)]
 mod tests;
 
+use std::ops::Sub;
 use std::rc::Rc;
+use std::time::Instant;
 
 use anyhow::Result;
 use cfg_if::cfg_if;
@@ -55,8 +57,14 @@ pub trait ProverServer {
         ctx: &VerifierContext,
         image: MemoryImage,
     ) -> Result<Receipt> {
+        let start_execute_guest = Instant::now();
         let mut exec = ExecutorImpl::new(env, image)?;
         let session = exec.run()?;
+
+        let execute_guest_cost = Instant::now().sub(start_execute_guest).as_secs_f64();
+        println!("execute_guest_cost: {:?}", execute_guest_cost);
+        log::info!("execute_guest_cost: {:?}", execute_guest_cost);
+
         self.prove_session(ctx, &session)
     }
 

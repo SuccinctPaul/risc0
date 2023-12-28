@@ -16,7 +16,7 @@ anyhow = "1.0"
 bonsai-ethereum-relay = { workspace = true }
 clap = { version = "4.1", features = ["derive", "env"] }
 ethers = { version = "2.0", features = ["rustls", "ws"] }
-fibonacci-methods = { path = "../../examples/profiling/methods" }
+fibonacci-methods = { path = "../../examples/fibonacci/methods" }
 risc0-zkvm = { workspace = true, features = ["prove", "profiler"] }
 risc0-zkvm-methods = { path = "../../risc0/zkvm/methods" }
 tokio = { version = "1", features = ["full", "sync"] }

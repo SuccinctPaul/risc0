@@ -104,7 +104,7 @@ fn run_guest(iters: i32) -> i32 {
 
 fn main() {
     let start = start_timer!(||"fibonacci_raw_wasm");
-    let fib_iters: i32 = 1000;
+    let fib_iters: i32 = 100;
     let _ = run_guest(fib_iters);
     end_timer!(start);
 }

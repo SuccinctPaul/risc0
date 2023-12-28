@@ -55,7 +55,7 @@ fn main() {
     let start = start_timer!(||"fibonacci_riscv");
 
     // Pick two numbers
-    let (receipt, _) = execute(1000);
+    let (receipt, _) = execute(100);
 
     // Here is where one would send 'receipt' over the network...
 

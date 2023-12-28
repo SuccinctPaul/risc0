@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use std::ops::Sub;
+use std::time::Instant;
 use anyhow::Result;
 use risc0_circuit_rv32im::{
     layout::{OutBuffer, LAYOUT},
@@ -102,9 +104,10 @@ where
             segment.po2,
             segment.cycles,
         );
+
+        let start_sythesis_witness = Instant::now();
         let (hal, circuit_hal) = (self.hal_pair.hal.as_ref(), &self.hal_pair.circuit_hal);
         let hashfn = &hal.get_hash_suite().name;
-
         let io = segment.prepare_globals();
         let machine = MachineContext::new(segment);
         let po2 = segment.po2 as usize;
@@ -119,6 +122,11 @@ where
 
         adapter.execute(prover.iop());
 
+        let sythesis_witness_cost = Instant::now().sub(start_sythesis_witness).as_secs_f64();
+        println!("sythesis_witness_cost: {:?}", sythesis_witness_cost);
+        log::info!("sythesis_witness_cost: {:?}", sythesis_witness_cost);
+
+        let start_generate_proof = Instant::now();
         prover.set_po2(adapter.po2() as usize);
 
         prover.commit_group(
@@ -142,6 +150,9 @@ where
         let out = hal.copy_from_elem("out", &adapter.get_io().as_slice());
 
         let seal = prover.finalize(&[&mix, &out], circuit_hal.as_ref());
+        let generate_proof_cost = Instant::now().sub(start_generate_proof).as_secs_f64();
+        println!("generate_proof_cost: {:?}", generate_proof_cost);
+        log::info!("generate_proof_cost: {:?}", generate_proof_cost);
 
         let receipt = SegmentReceipt {
             seal,

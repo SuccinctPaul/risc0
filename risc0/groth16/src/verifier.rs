@@ -78,11 +78,11 @@ const IC5_Y: &str = "15060583660288623605191393599883223885678013570733629274538
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Verifier {
     /// prepared verifying key little endian encoded.
-    encoded_pvk: Vec<u8>,
+    pub encoded_pvk: Vec<u8>,
     /// proof little endian encoded.
-    encoded_proof: Vec<u8>,
+    pub encoded_proof: Vec<u8>,
     /// prepared public inputs little endian encoded.
-    encoded_prepared_inputs: Vec<u8>,
+    pub encoded_prepared_inputs: Vec<u8>,
 }
 
 impl Verifier {
@@ -158,7 +158,7 @@ impl Verifier {
 
 /// Verifying key for Groth16 proofs.
 #[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct Fr(#[serde(with = "serde_ark")] pub(crate) ark_bn254::Fr);
+pub struct Fr(#[serde(with = "serde_ark")] pub ark_bn254::Fr);
 
 impl Fr {
     #[stability::unstable]

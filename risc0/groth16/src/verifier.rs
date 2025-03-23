@@ -158,12 +158,11 @@ impl Verifier {
 
 /// Verifying key for Groth16 proofs.
 #[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct Fr(#[serde(with = "serde_ark")] pub ark_bn254::Fr);
+pub struct Fr(#[serde(with = "serde_ark")] pub(crate) ark_bn254::Fr);
 
 impl Fr {
-    #[stability::unstable]
     pub fn ark_fr(&self) -> ark_bn254::Fr {
-        self.0
+        self.0.clone()
     }
 }
 
@@ -199,7 +198,6 @@ fn hash_point<S: Sha256>(p: impl AffineRepr) -> Digest {
 }
 
 impl VerifyingKey {
-    #[stability::unstable]
     pub fn ark_verifying_key(&self) -> ark_groth16::VerifyingKey<Bn254> {
         self.0.clone()
     }
